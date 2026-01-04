@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../api/client';
+import AdminHeader from '../components/admin/AdminHeader';
 import { ShoppingBag, Package, Users, TrendingUp } from 'lucide-react';
 import StatsCard from '@/components/admin/StatsCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -50,7 +51,12 @@ export default function AdminDashboard() {
   const recentProducts = products.slice(0, 5);
 
   return (
-    <div>
+    <div className="flex-1">
+      <AdminHeader
+        title="Tableau de bord"
+        subtitle="Vue d'ensemble de votre boutique"
+      />
+      <main className="p-8">
       {/* Welcome Banner */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -192,6 +198,7 @@ export default function AdminDashboard() {
           </Card>
         </motion.div>
       </div>
+      </main>
     </div>
   );
 }

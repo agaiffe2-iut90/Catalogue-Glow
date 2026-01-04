@@ -24,7 +24,7 @@ export default function ProductDetail() {
     initialData: [],
   });
 
-  const product = products.find(p => p.id === productId);
+  const product = products.find(p => p.id === Number(productId));
   const relatedProducts = products
     .filter(p => p.id !== productId && p.category_id === product?.category_id)
     .slice(0, 4);
@@ -137,6 +137,23 @@ export default function ProductDetail() {
                 {product.description || 'Aucune description disponible.'}
               </p>
             </div>
+
+            {/* Ingredients */}
+            {product.ingredients && product.ingredients.length > 0 && (
+              <div className="border-t border-gray-200 pt-6">
+                <h3 className="font-semibold text-gray-900 mb-3 text-lg">Ingrédients</h3>
+                <div className="flex flex-wrap gap-2">
+                  {product.ingredients.map((ingredient, index) => (
+                    <span
+                      key={index}
+                      className="inline-block bg-stone-100 text-stone-600 text-sm px-3 py-1 rounded-full"
+                    >
+                      {ingredient}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Features */}
             <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-6">

@@ -11,7 +11,7 @@ export default function HeroSection() {
             {/* Background */}
             <div className="absolute inset-0">
                 <div className="absolute inset-0 bg-gradient-to-r from-stone-100/95 via-stone-100/80 to-transparent z-10" />
-                <img 
+                <img
                     src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&q=80"
                     alt="Beauty Products"
                     className="w-full h-full object-cover"
@@ -33,22 +33,22 @@ export default function HeroSection() {
                         <span className="inline-block text-xs tracking-[0.3em] text-stone-500 mb-6 uppercase">
                             Nouvelle Collection
                         </span>
-                        
+
                         <h1 className="font-display text-5xl md:text-7xl font-light text-stone-900 leading-tight mb-6">
                             Révélez votre
                             <span className="block font-normal italic text-stone-700">
                                 éclat naturel
                             </span>
                         </h1>
-                        
+
                         <p className="text-stone-600 text-lg md:text-xl leading-relaxed mb-10 max-w-lg">
-                            Des formules innovantes aux ingrédients naturels pour sublimer 
+                            Des formules innovantes aux ingrédients naturels pour sublimer
                             votre beauté au quotidien.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <Link to={createPageUrl('Products')}>
-                                <Button 
+                            <Link to={createPageUrl('Catalog')}>
+                                <Button
                                     size="lg"
                                     className="bg-stone-900 hover:bg-stone-800 text-white px-10 py-6 text-sm tracking-wide rounded-none"
                                 >
@@ -57,7 +57,7 @@ export default function HeroSection() {
                                 </Button>
                             </Link>
                             <Link to={createPageUrl('Categories')}>
-                                <Button 
+                                <Button
                                     variant="outline"
                                     size="lg"
                                     className="border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white px-10 py-6 text-sm tracking-wide rounded-none"
@@ -71,7 +71,7 @@ export default function HeroSection() {
             </div>
 
             {/* Scroll Indicator */}
-            <motion.div 
+            <motion.div
                 className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}

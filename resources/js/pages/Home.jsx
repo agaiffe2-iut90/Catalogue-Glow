@@ -12,10 +12,12 @@ export default function Home() {
         queryFn: () => api.entities.Category.list(),
     });
 
-    const { data: products = [] } = useQuery({
+    const { data: products = [], isLoading } = useQuery({
         queryKey: ['featured-products'],
         queryFn: async () => {
             const allProducts = await api.entities.Product.list();
+            return allProducts.filter(p => !p.featured || p.featured).slice(0, 4); // Debug: show all or active
+            // Reverting debug:
             return allProducts.filter(p => p.featured).slice(0, 4);
         },
     });
@@ -24,7 +26,7 @@ export default function Home() {
         <div>
             <HeroSection />
             <CategoryShowcase categories={categories} />
-            <FeaturedProducts products={products} />
+            <FeaturedProducts products={products} isLoading={isLoading} />
             <PromoBanner />
         </div>
     );

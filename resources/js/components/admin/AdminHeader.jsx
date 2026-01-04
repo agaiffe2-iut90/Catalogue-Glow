@@ -59,7 +59,7 @@ export default function AdminHeader({ title, subtitle }) {
                     {/* User Menu */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className="flex items-center gap-3 pl-4 border-l border-stone-200">
+                            <div className="flex items-center gap-3 pl-4 border-l border-stone-200 cursor-pointer hover:bg-stone-50 rounded px-2 py-1">
                                 <div className="w-9 h-9 bg-gradient-to-br from-rose-100 to-amber-100 rounded-full flex items-center justify-center">
                                     <span className="text-sm font-medium text-stone-700">
                                         {user?.full_name?.charAt(0) || 'A'}
@@ -72,7 +72,7 @@ export default function AdminHeader({ title, subtitle }) {
                                     <p className="text-xs text-stone-500">Administrateur</p>
                                 </div>
                                 <ChevronDown size={16} className="text-stone-400" />
-                            </button>
+                            </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
                             <DropdownMenuItem>

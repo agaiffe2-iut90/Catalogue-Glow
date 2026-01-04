@@ -35,7 +35,7 @@ export default function Categories() {
         <div className="min-h-screen bg-white">
             {/* Hero */}
             <div className="relative h-64 md:h-80 bg-stone-100 overflow-hidden">
-                <img 
+                <img
                     src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1920&q=80"
                     alt="Catégories"
                     className="w-full h-full object-cover opacity-60"
@@ -82,18 +82,18 @@ export default function Categories() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
                             >
-                                <Link 
-                                    to={`${createPageUrl('Products')}?category=${category.slug}`}
+                                <Link
+                                    to={`${createPageUrl('Catalog')}?category=${category.slug}`}
                                     className="group block"
                                 >
                                     <div className="relative aspect-[4/5] overflow-hidden bg-stone-200 mb-4">
-                                        <img 
+                                        <img
                                             src={category.image_url || defaultImages[index % defaultImages.length]}
                                             alt={category.name}
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                        
+
                                         <div className="absolute bottom-6 left-6 right-6 opacity-0 transform translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
                                             <div className="flex items-center gap-2 text-white">
                                                 <span className="text-sm tracking-wide">Découvrir</span>
@@ -101,7 +101,7 @@ export default function Categories() {
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="space-y-2">
                                         <h3 className="text-xl font-display font-light text-stone-900 group-hover:text-stone-600 transition-colors">
                                             {category.name}

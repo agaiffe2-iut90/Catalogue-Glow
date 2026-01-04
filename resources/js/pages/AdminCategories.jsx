@@ -196,10 +196,7 @@ export default function AdminCategories() {
     );
 
     return (
-        <div className="flex">
-            <AdminSidebar />
-            
-            <div className="flex-1 ml-64">
+        <div className="flex-1">
                 <AdminHeader 
                     title="Gestion des Catégories" 
                     subtitle={`${categories.length} catégories au total`}
@@ -312,7 +309,6 @@ export default function AdminCategories() {
                         </Table>
                     </div>
                 </main>
-            </div>
 
             {/* Create/Edit Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -358,24 +354,28 @@ export default function AdminCategories() {
                         <div className="space-y-2">
                             <Label>Image</Label>
                             <div className="flex gap-2 mb-2">
-                                <Button 
+                                <button 
                                     type="button" 
-                                    variant={imageMode === 'url' ? 'default' : 'outline'} 
-                                    size="sm"
+                                    className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                                        imageMode === 'url' 
+                                            ? 'bg-stone-900 text-white hover:bg-stone-800' 
+                                            : 'bg-white text-stone-900 border border-stone-300 hover:bg-stone-50'
+                                    }`}
                                     onClick={() => setImageMode('url')}
-                                    className="flex-1"
                                 >
                                     Lien URL
-                                </Button>
-                                <Button 
+                                </button>
+                                <button 
                                     type="button" 
-                                    variant={imageMode === 'file' ? 'default' : 'outline'} 
-                                    size="sm"
+                                    className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                                        imageMode === 'file' 
+                                            ? 'bg-stone-900 text-white hover:bg-stone-800' 
+                                            : 'bg-white text-stone-900 border border-stone-300 hover:bg-stone-50'
+                                    }`}
                                     onClick={() => setImageMode('file')}
-                                    className="flex-1"
                                 >
                                     Fichier
-                                </Button>
+                                </button>
                             </div>
                             
                             {imageMode === 'url' ? (

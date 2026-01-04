@@ -5,48 +5,29 @@ import { createPageUrl } from '../../utils';
 import { Heart, ShoppingBag, Star } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
-const defaultProducts = [
-    {
-        id: '1',
-        name: 'Sérum Éclat Vitamine C',
-        price: 49.90,
-        image_url: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80',
-        category_name: 'Soins Visage',
-        featured: true
-    },
-    {
-        id: '2',
-        name: 'Rouge à Lèvres Velours',
-        price: 32.00,
-        image_url: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=600&q=80',
-        category_name: 'Maquillage',
-        featured: true
-    },
-    {
-        id: '3',
-        name: 'Crème Hydratante Intense',
-        price: 45.00,
-        image_url: 'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=600&q=80',
-        category_name: 'Soins Visage',
-        featured: true
-    },
-    {
-        id: '4',
-        name: 'Huile Corps Précieuse',
-        price: 38.50,
-        image_url: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80',
-        category_name: 'Soins Corps',
-        featured: true
+export default function FeaturedProducts({ products = [], isLoading }) {
+    if (isLoading) {
+        return (
+            <section className="py-24">
+                <div className="container mx-auto px-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {[...Array(4)].map((_, i) => (
+                            <div key={i} className="bg-stone-100 rounded-lg h-96 animate-pulse" />
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
     }
-];
 
-export default function FeaturedProducts({ products = [] }) {
-    const displayProducts = products.length > 0 ? products : defaultProducts;
+    if (products.length === 0) {
+        return null;
+    }
 
     return (
         <section className="py-24">
             <div className="container mx-auto px-6">
-                <motion.div 
+                <motion.div
                     className="flex flex-col md:flex-row md:items-end md:justify-between mb-16"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -58,8 +39,8 @@ export default function FeaturedProducts({ products = [] }) {
                             Produits Vedettes
                         </h2>
                     </div>
-                    <Link 
-                        to={createPageUrl('Products')}
+                    <Link
+                        to={createPageUrl('Catalog')}
                         className="mt-6 md:mt-0 text-sm tracking-wide text-stone-600 hover:text-stone-900 transition-colors underline underline-offset-4"
                     >
                         Voir tous les produits
@@ -67,7 +48,7 @@ export default function FeaturedProducts({ products = [] }) {
                 </motion.div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {displayProducts.slice(0, 4).map((product, index) => (
+                    {products.map((product, index) => (
                         <motion.div
                             key={product.id}
                             initial={{ opacity: 0, y: 30 }}
@@ -78,12 +59,12 @@ export default function FeaturedProducts({ products = [] }) {
                         >
                             <Link to={`${createPageUrl('ProductDetail')}?id=${product.id}`}>
                                 <div className="relative aspect-square overflow-hidden bg-stone-100 mb-4">
-                                    <img 
-                                        src={product.image_url || defaultProducts[index % 4].image_url}
+                                    <img
+                                        src={product.image_url || 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800'}
                                         alt={product.name}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                     />
-                                    
+
                                     {/* Quick Actions */}
                                     <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 transform translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
                                         <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-stone-100 transition-colors">
@@ -121,7 +102,7 @@ export default function FeaturedProducts({ products = [] }) {
                                     <span className="text-xs text-stone-400">(24)</span>
                                 </div>
                                 <p className="text-lg font-medium text-stone-900">
-                                    {product.price?.toFixed(2)} €
+                                    {Number(product.price || 0).toFixed(2)} €
                                 </p>
                             </div>
                         </motion.div>

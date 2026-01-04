@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
+import { api } from './api/client';
 
 import { Menu, X, ShoppingBag, User, LogOut, LayoutDashboard, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Simulation d'un utilisateur connecté (Admin) pour voir toutes les interfaces
-  const [user, setUser] = useState({
-    name: 'Demo User',
-    email: 'demo@glow.com',
-    role: 'admin'
-  });
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  /*
+  const isAdmin = user?.role === 'admin';
+  const isAdminPage = currentPageName?.startsWith('Admin');
   useEffect(() => {
     const loadUser = async () => {
+      setLoading(true);
       try {
-        const response = await window.axios.get('/current-user');
-        setUser(response.data);
+        const currentUser = await api.auth.me();
+        setUser(currentUser);
       } catch (error) {
         setUser(null);
       } finally {
@@ -29,17 +27,35 @@ export default function Layout({ children, currentPageName }) {
     };
     loadUser();
   }, []);
-  */
 
-  const isAdmin = user?.role === 'admin';
-  const isAdminPage = currentPageName?.startsWith('Admin');
+  // Redirect logic for Admin Pages
+  useEffect(() => {
+    if (!loading && isAdminPage) {
+      if (!user) {
+        // Not logged in -> Go to Login
+        window.location.href = '/login';
+      } else if (user.role !== 'admin') {
+        // Logged in but not admin -> Go Home
+        window.location.href = '/app';
+      }
+    }
+  }, [loading, isAdminPage, user]);
 
   const handleLogout = async () => {
-    // Simulation de déconnexion
-    window.location.href = '/';
+    try {
+      await api.auth.logout();
+    } catch (error) {
+      window.location.href = '/';
+    }
   };
 
-  if (isAdminPage) {
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-500"></div>
+    </div>;
+  }
+
+  if (isAdminPage && user?.role === 'admin') {
     return (
       <div className="min-h-screen bg-gray-50">
         <style>{`
@@ -49,7 +65,7 @@ export default function Layout({ children, currentPageName }) {
             --dark: #2d2d2d;
           }
         `}</style>
-        
+
         {/* Admin Sidebar */}
         <div className="fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-2xl z-50">
           <div className="p-6 border-b border-gray-700">
@@ -67,11 +83,10 @@ export default function Layout({ children, currentPageName }) {
           <nav className="p-4 space-y-1">
             <Link
               to={createPageUrl('AdminDashboard')}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                currentPageName === 'AdminDashboard'
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                  : 'text-gray-300 hover:bg-gray-700'
-              }`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${currentPageName === 'AdminDashboard'
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
+                : 'text-gray-300 hover:bg-gray-700'
+                }`}
             >
               <LayoutDashboard className="w-5 h-5" />
               <span className="font-medium">Tableau de bord</span>
@@ -79,11 +94,10 @@ export default function Layout({ children, currentPageName }) {
 
             <Link
               to={createPageUrl('AdminCategories')}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                currentPageName === 'AdminCategories'
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                  : 'text-gray-300 hover:bg-gray-700'
-              }`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${currentPageName === 'AdminCategories'
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
+                : 'text-gray-300 hover:bg-gray-700'
+                }`}
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -93,11 +107,10 @@ export default function Layout({ children, currentPageName }) {
 
             <Link
               to={createPageUrl('AdminProducts')}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                currentPageName === 'AdminProducts'
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                  : 'text-gray-300 hover:bg-gray-700'
-              }`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${currentPageName === 'AdminProducts'
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
+                : 'text-gray-300 hover:bg-gray-700'
+                }`}
             >
               <ShoppingBag className="w-5 h-5" />
               <span className="font-medium">Produits</span>
@@ -105,11 +118,10 @@ export default function Layout({ children, currentPageName }) {
 
             <Link
               to={createPageUrl('AdminStock')}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                currentPageName === 'AdminStock'
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                  : 'text-gray-300 hover:bg-gray-700'
-              }`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${currentPageName === 'AdminStock'
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
+                : 'text-gray-300 hover:bg-gray-700'
+                }`}
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -119,11 +131,10 @@ export default function Layout({ children, currentPageName }) {
 
             <Link
               to={createPageUrl('AdminUsers')}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                currentPageName === 'AdminUsers'
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                  : 'text-gray-300 hover:bg-gray-700'
-              }`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${currentPageName === 'AdminUsers'
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
+                : 'text-gray-300 hover:bg-gray-700'
+                }`}
             >
               <User className="w-5 h-5" />
               <span className="font-medium">Utilisateurs</span>
@@ -211,36 +222,27 @@ export default function Layout({ children, currentPageName }) {
             <div className="hidden md:flex items-center gap-8">
               <Link
                 to={createPageUrl('Home')}
-                className={`text-sm font-medium transition-colors ${
-                  currentPageName === 'Home'
-                    ? 'text-rose-500 border-b-2 border-rose-500'
-                    : 'text-gray-700 hover:text-rose-500'
-                }`}
+                className={`text-sm font-medium transition-colors ${currentPageName === 'Home'
+                  ? 'text-rose-500 border-b-2 border-rose-500'
+                  : 'text-gray-700 hover:text-rose-500'
+                  }`}
               >
                 Accueil
               </Link>
               <Link
                 to={createPageUrl('Catalog')}
-                className={`text-sm font-medium transition-colors ${
-                  currentPageName === 'Catalog'
-                    ? 'text-rose-500 border-b-2 border-rose-500'
-                    : 'text-gray-700 hover:text-rose-500'
-                }`}
+                className={`text-sm font-medium transition-colors ${currentPageName === 'Catalog'
+                  ? 'text-rose-500 border-b-2 border-rose-500'
+                  : 'text-gray-700 hover:text-rose-500'
+                  }`}
               >
                 Catalogue
               </Link>
 
               {!loading && (
                 <>
-                  {user ? (
+                  {user && isAdmin && (
                     <>
-                      <Link
-                        to={createPageUrl('Profile')}
-                        className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-rose-500 transition-colors"
-                      >
-                        <User className="w-4 h-4" />
-                        Mon Profil
-                      </Link>
                       <Link
                         to={createPageUrl('AdminDashboard')}
                         className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 text-white text-sm font-medium hover:shadow-lg transition-all"
@@ -258,14 +260,6 @@ export default function Layout({ children, currentPageName }) {
                         Déconnexion
                       </Button>
                     </>
-                  ) : (
-                    <Button
-                      onClick={() => window.location.href = '/login'}
-                      className="bg-gradient-to-r from-rose-500 to-pink-600 text-white hover:shadow-lg transition-all"
-                    >
-                      <User className="w-4 h-4 mr-2" />
-                      Se connecter
-                    </Button>
                   )}
                 </>
               )}
@@ -299,14 +293,8 @@ export default function Layout({ children, currentPageName }) {
               >
                 Catalogue
               </Link>
-              {user && (
+              {user && isAdmin && (
                 <>
-                  <Link
-                    to={createPageUrl('Profile')}
-                    className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-lg"
-                  >
-                    Mon Profil
-                  </Link>
                   <Link
                     to={createPageUrl('AdminDashboard')}
                     className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-lg"
@@ -345,7 +333,7 @@ export default function Layout({ children, currentPageName }) {
               <ul className="space-y-2 text-gray-400">
                 <li><Link to={createPageUrl('Home')} className="hover:text-rose-400 transition-colors">Accueil</Link></li>
                 <li><Link to={createPageUrl('Catalog')} className="hover:text-rose-400 transition-colors">Catalogue</Link></li>
-                <li><Link to={createPageUrl('Profile')} className="hover:text-rose-400 transition-colors">Mon Profil</Link></li>
+                {/* Profile Link Removed */}
               </ul>
             </div>
 

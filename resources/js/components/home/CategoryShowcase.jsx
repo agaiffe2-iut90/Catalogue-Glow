@@ -41,7 +41,7 @@ export default function CategoryShowcase({ categories = [] }) {
     return (
         <section className="py-24 bg-stone-50">
             <div className="container mx-auto px-6">
-                <motion.div 
+                <motion.div
                     className="text-center mb-16"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -62,17 +62,17 @@ export default function CategoryShowcase({ categories = [] }) {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                         >
-                            <Link 
-                                to={`${createPageUrl('Products')}?category=${category.slug}`}
+                            <Link
+                                to={`${createPageUrl('Catalog')}?category=${category.slug}`}
                                 className="group block relative aspect-[3/4] overflow-hidden bg-stone-200"
                             >
-                                <img 
+                                <img
                                     src={category.image_url || defaultCategories[index % 4].image_url}
                                     alt={category.name}
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-stone-900/20 to-transparent" />
-                                
+
                                 <div className="absolute inset-0 p-6 flex flex-col justify-end">
                                     <div className="transform transition-transform duration-300 group-hover:-translate-y-2">
                                         <p className="text-xs tracking-widest text-stone-300 mb-2 uppercase">
@@ -82,7 +82,7 @@ export default function CategoryShowcase({ categories = [] }) {
                                             {category.name}
                                         </h3>
                                     </div>
-                                    
+
                                     <div className="flex items-center gap-2 text-white opacity-0 transform translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
                                         <span className="text-sm tracking-wide">Voir la collection</span>
                                         <ArrowUpRight size={16} />

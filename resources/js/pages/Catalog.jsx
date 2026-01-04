@@ -35,8 +35,17 @@ export default function Catalog() {
 
   // Filter products
   const filteredProducts = products.filter(product => {
-    const matchesCategory = !selectedCategory || product.category_id === selectedCategory;
-    const matchesSearch = !searchQuery || 
+    let matchesCategory = !selectedCategory;
+
+    if (selectedCategory) {
+      // Check if selectedCategory is an ID or a Slug
+      const categoryBySlug = categories.find(c => c.slug === selectedCategory);
+      const categoryIdToCheck = categoryBySlug ? categoryBySlug.id : Number(selectedCategory);
+
+      matchesCategory = product.category_id === categoryIdToCheck;
+    }
+
+    const matchesSearch = !searchQuery ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;

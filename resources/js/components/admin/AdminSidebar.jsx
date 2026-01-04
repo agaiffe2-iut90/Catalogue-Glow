@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { 
-    LayoutDashboard, 
-    Package, 
-    FolderTree, 
-    Users, 
+import {
+    LayoutDashboard,
+    Package,
+    FolderTree,
+    Users,
     BarChart3,
     Settings,
     ArrowLeft,
@@ -17,7 +17,6 @@ const menuItems = [
     { name: 'Produits', icon: Package, page: 'AdminProducts', path: '/app/admin/products' },
     { name: 'Catégories', icon: FolderTree, page: 'AdminCategories', path: '/app/admin/categories' },
     { name: 'Stocks', icon: Boxes, page: 'AdminStock', path: '/app/admin/stock' },
-    { name: 'Utilisateurs', icon: Users, page: 'AdminUsers', path: '/app/admin/users' },
 ];
 
 export default function AdminSidebar() {
@@ -47,11 +46,10 @@ export default function AdminSidebar() {
                         <Link
                             key={item.page}
                             to={item.path}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                                isActive 
-                                    ? 'bg-white text-stone-900' 
-                                    : 'text-stone-400 hover:bg-stone-800 hover:text-white'
-                            }`}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive
+                                ? 'bg-white text-stone-900'
+                                : 'text-stone-400 hover:bg-stone-800 hover:text-white'
+                                }`}
                         >
                             <item.icon size={20} />
                             <span className="text-sm font-medium">{item.name}</span>

@@ -18,7 +18,7 @@ export default function PromoBanner() {
                     >
                         <div className="absolute -top-8 -left-8 w-64 h-64 bg-rose-200/30 rounded-full blur-3xl" />
                         <div className="relative aspect-[4/5] overflow-hidden">
-                            <img 
+                            <img
                                 src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&q=80"
                                 alt="Routine Beauté"
                                 className="w-full h-full object-cover"
@@ -42,13 +42,13 @@ export default function PromoBanner() {
                             <span className="block italic text-stone-600">sur mesure</span>
                         </h2>
                         <p className="text-stone-600 text-lg leading-relaxed mt-6 mb-8">
-                            Découvrez nos coffrets personnalisés et bénéficiez de conseils 
+                            Découvrez nos coffrets personnalisés et bénéficiez de conseils
                             d'experts pour une routine adaptée à votre type de peau.
                         </p>
-                        
+
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <Link to={createPageUrl('Products')}>
-                                <Button 
+                            <Link to={createPageUrl('Catalog')}>
+                                <Button
                                     size="lg"
                                     className="bg-stone-900 hover:bg-stone-800 text-white px-8 py-6 text-sm tracking-wide rounded-none"
                                 >

@@ -4,11 +4,11 @@ import { api } from '../api/client';
 
 import AdminSidebar from '../components/admin/AdminSidebar';
 import AdminHeader from '../components/admin/AdminHeader';
-import { 
-    Plus, 
-    Search, 
-    Edit, 
-    Trash2, 
+import {
+    Plus,
+    Search,
+    Edit,
+    Trash2,
     MoreHorizontal,
     Image as ImageIcon,
     Loader2,
@@ -73,7 +73,8 @@ export default function AdminProducts() {
         category_id: '',
         category_name: '',
         image_url: '',
-        featured: false
+        featured: false,
+        ingredients: []
     });
 
     const queryClient = useQueryClient();
@@ -141,7 +142,8 @@ export default function AdminProducts() {
             category_id: product.category_id || '',
             category_name: product.category_name || '',
             image_url: product.image_url || '',
-            featured: product.featured || false
+            featured: product.featured || false,
+            ingredients: product.ingredients || []
         });
         setIsDialogOpen(true);
     };
@@ -177,17 +179,14 @@ export default function AdminProducts() {
         }
     };
 
-    const filteredProducts = products.filter(p => 
+    const filteredProducts = products.filter(p =>
         p.name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
-        <div className="flex">
-            <AdminSidebar />
-            
-            <div className="flex-1 ml-64">
-                <AdminHeader 
-                    title="Gestion des Produits" 
+        <div className="flex-1">
+                <AdminHeader
+                    title="Gestion des Produits"
                     subtitle={`${products.length} produits au total`}
                 />
 
@@ -196,7 +195,7 @@ export default function AdminProducts() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-between mb-6">
                         <div className="relative flex-1 max-w-md">
                             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
-                            <Input 
+                            <Input
                                 placeholder="Rechercher un produit..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -242,8 +241,8 @@ export default function AdminProducts() {
                                             <TableCell>
                                                 <div className="w-12 h-12 bg-stone-100 rounded-lg overflow-hidden">
                                                     {product.image_url ? (
-                                                        <img 
-                                                            src={product.image_url} 
+                                                        <img
+                                                            src={product.image_url}
                                                             alt={product.name}
                                                             className="w-full h-full object-cover"
                                                         />
@@ -268,7 +267,7 @@ export default function AdminProducts() {
                                                 </span>
                                             </TableCell>
                                             <TableCell>
-                                                <span className="font-medium">{product.price?.toFixed(2)} €</span>
+                                                <span className="font-medium">{Number(product.price || 0).toFixed(2)} €</span>
                                             </TableCell>
                                             <TableCell>
                                                 <span className={product.stock_quantity <= 5 ? 'text-red-600 font-medium' : ''}>
@@ -296,7 +295,7 @@ export default function AdminProducts() {
                                                             <Edit size={14} className="mr-2" />
                                                             Modifier
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem 
+                                                        <DropdownMenuItem
                                                             className="text-red-600"
                                                             onClick={() => {
                                                                 setSelectedProduct(product);
@@ -316,7 +315,6 @@ export default function AdminProducts() {
                         </Table>
                     </div>
                 </main>
-            </div>
 
             {/* Create/Edit Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -326,22 +324,22 @@ export default function AdminProducts() {
                             {selectedProduct ? 'Modifier le produit' : 'Nouveau produit'}
                         </DialogTitle>
                     </DialogHeader>
-                    
+
                     <div className="grid gap-6 py-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label>Nom du produit *</Label>
-                                <Input 
+                                <Input
                                     value={formData.name}
-                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     placeholder="Ex: Sérum Vitamine C"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label>Catégorie</Label>
-                                <Select 
-                                    value={formData.category_id}
-                                    onValueChange={(value) => setFormData({...formData, category_id: value})}
+                                <Select
+                                    value={formData.category_id || ''}
+                                    onValueChange={(value) => setFormData({ ...formData, category_id: value })}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Sélectionner" />
@@ -359,9 +357,9 @@ export default function AdminProducts() {
 
                         <div className="space-y-2">
                             <Label>Description</Label>
-                            <Textarea 
+                            <Textarea
                                 value={formData.description}
-                                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 placeholder="Description du produit..."
                                 rows={3}
                             />
@@ -370,20 +368,20 @@ export default function AdminProducts() {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label>Prix (€) *</Label>
-                                <Input 
+                                <Input
                                     type="number"
                                     step="0.01"
                                     value={formData.price}
-                                    onChange={(e) => setFormData({...formData, price: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                                     placeholder="0.00"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label>Quantité en stock</Label>
-                                <Input 
+                                <Input
                                     type="number"
                                     value={formData.stock_quantity}
-                                    onChange={(e) => setFormData({...formData, stock_quantity: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, stock_quantity: e.target.value })}
                                     placeholder="0"
                                 />
                             </div>
@@ -391,22 +389,33 @@ export default function AdminProducts() {
 
                         <div className="space-y-2">
                             <Label>URL de l'image</Label>
-                            <Input 
+                            <Input
                                 value={formData.image_url}
-                                onChange={(e) => setFormData({...formData, image_url: e.target.value})}
+                                onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                                 placeholder="https://..."
                             />
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <Checkbox 
+                            <Checkbox
                                 id="featured"
-                                checked={formData.featured}
-                                onCheckedChange={(checked) => setFormData({...formData, featured: checked})}
+                                checked={!!formData.featured}
+                                onCheckedChange={(checked) => setFormData({ ...formData, featured: !!checked })}
                             />
                             <Label htmlFor="featured" className="cursor-pointer">
                                 Produit vedette (affiché sur la page d'accueil)
                             </Label>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Ingrédients</Label>
+                            <p className="text-xs text-stone-500 mb-1">Entrez chaque ingrédient sur une nouvelle ligne</p>
+                            <Textarea
+                                value={Array.isArray(formData.ingredients) ? formData.ingredients.join('\n') : formData.ingredients}
+                                onChange={(e) => setFormData({ ...formData, ingredients: e.target.value.split('\n') })}
+                                placeholder="Aqua&#10;Glycerin&#10;Vitamin C"
+                                rows={5}
+                            />
                         </div>
                     </div>
 
@@ -414,7 +423,7 @@ export default function AdminProducts() {
                         <Button variant="outline" onClick={handleCloseDialog}>
                             Annuler
                         </Button>
-                        <Button 
+                        <Button
                             onClick={handleSubmit}
                             className="bg-stone-900 hover:bg-stone-800"
                             disabled={!formData.name || !formData.price}
@@ -439,7 +448,7 @@ export default function AdminProducts() {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Annuler</AlertDialogCancel>
-                        <AlertDialogAction 
+                        <AlertDialogAction
                             onClick={() => deleteMutation.mutate(selectedProduct?.id)}
                             className="bg-red-600 hover:bg-red-700"
                         >
